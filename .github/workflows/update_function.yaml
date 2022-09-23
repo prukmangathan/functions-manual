@@ -90,7 +90,7 @@ jobs:
           echo "Updating functions Memory"
           echo "Project environment: ${{ github.event.inputs.Environment }}"
           echo "Function Name: ${{ github.event.inputs.Functions }}"
-          echo "gcloud functions deploy ${{ github.event.inputs.Functions }} --region ${{ github.event.inputs.Region }} --project ${{ github.event.inputs.Project }}  --memory ${{ github.event.inputs.Memory }}
+          echo "gcloud functions deploy ${{ github.event.inputs.Functions }} --region ${{ github.event.inputs.Region }} --project ${{ github.event.inputs.Project }}  --memory ${{ github.event.inputs.Memory }}"
 
       - name: functions env update
         if: ${{ github.event.inputs.Parameter == 'Environment_variables' }}
