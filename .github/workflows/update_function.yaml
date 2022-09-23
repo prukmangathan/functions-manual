@@ -13,6 +13,20 @@ on:
           - dev
           - qa
           - prod
+      Region:
+        required: true
+        type: choice
+        description: "Region"
+        options:
+          - us-east1
+          - us-central1
+      Project:
+        required: true
+        type: choice
+        description: "Project"
+        options:
+          - dazzling-matrix-361211
+          - dazzling-matrix-361234
       Functions:
         required: true
         type: choice
@@ -76,6 +90,7 @@ jobs:
           echo "Updating functions Memory"
           echo "Project environment: ${{ github.event.inputs.Environment }}"
           echo "Function Name: ${{ github.event.inputs.Functions }}"
+          echo "gcloud functions deploy ${{ github.event.inputs.Functions }} --region ${{ github.event.inputs.Region }} --project ${{ github.event.inputs.Project }}  --memory ${{ github.event.inputs.Memory }}
 
       - name: functions env update
         if: ${{ github.event.inputs.Parameter == 'Environment_variables' }}
