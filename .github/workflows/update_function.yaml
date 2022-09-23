@@ -1,0 +1,85 @@
+name: "Sample Options"
+
+on:
+  workflow_dispatch:
+    branches:
+      - main
+    inputs:
+      Environment:
+        required: true
+        type: choice
+        description: "Environment"
+        options:
+          - dev
+          - qa
+          - prod
+      Functions:
+        required: true
+        type: choice
+        description: "Function Name"
+        options:
+          - Test_function
+          - demo_function
+      Parameter:
+        required: true
+        type: choice
+        description: "Functions Parameter"
+        options:
+          - Code
+          - Memory
+          - Environment_variables
+      Code:
+        required: true
+        type: choice
+        description: "Functions code"
+        options:
+          - functions_code/test_functions
+          - functions_code/demo_functions
+      Memory:
+        required: true
+        type: choice
+        description: "Functions Memory"
+        options:
+          - 128
+          - 256
+          - 512
+      Environment_variables:
+        required: true
+        type: choice
+        description: "Functions Memory"
+        options:
+          - functions_code/test_functions/env
+          - functions_code/demo_functions/env
+
+env:
+  GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+
+jobs:
+  terraform:
+    name: "Cloud Functions Update"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: functions code update
+        if: ${{ github.event.inputs.Parameter == 'Code' }}
+        run: |
+          echo "Updating functions code"
+          echo "Project environment: ${{ github.event.inputs.Environment }}"
+          echo "Function Name: ${{ github.event.inputs.Functions }}"
+
+      - name: functions memory update
+        if: ${{ github.event.inputs.Parameter == 'Memory' }}
+        run: |
+          echo "Updating functions Memory"
+          echo "Project environment: ${{ github.event.inputs.Environment }}"
+          echo "Function Name: ${{ github.event.inputs.Functions }}"
+
+      - name: functions env update
+        if: ${{ github.event.inputs.Parameter == 'Environment_variables' }}
+        run: |
+          echo "Updating functions Environment Variables"
+          echo "Project environment: ${{ github.event.inputs.Environment }}"
+          echo "Function Name: ${{ github.event.inputs.Functions }}"
