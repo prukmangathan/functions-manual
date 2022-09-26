@@ -94,7 +94,7 @@ jobs:
         env:
           PROJECT_ID: ${{ github.event.inputs.Project }}
           APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-          GOOGLE_FUNCTION_SOURCE: functions_code/temp/"${{ github.event.inputs.Functions }}.zip"
+          GOOGLE_FUNCTION_SOURCE: functions_code/${{ github.event.inputs.Functions }}
         if: ${{ github.event.inputs.Parameter == 'Memory' }}
 
       - name: functions env update
