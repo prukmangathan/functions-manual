@@ -66,6 +66,7 @@ on:
           - functions_code/demo_functions/env
 
 env:
+  PROJECT_ID: ${{ github.event.inputs.Project }}
   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
 jobs:
