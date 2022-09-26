@@ -78,7 +78,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: functions code update
-        uses: actions-hub/gcloud@master
+        #uses: actions-hub/gcloud@master
         if: ${{ github.event.inputs.Parameter == 'Code' }}
         run: |
           echo "Updating functions Code"
@@ -87,15 +87,12 @@ jobs:
 
       - name: functions memory update
         uses: actions-hub/gcloud@master
+        with:
+          args: functions deploy ${{ github.event.inputs.Functions }} --region ${{ github.event.inputs.Region }} --project ${{ github.event.inputs.Project }}  --memory "${{ github.event.inputs.Memory }}MB"
         if: ${{ github.event.inputs.Parameter == 'Memory' }}
-        run: |
-          echo "Updating functions Memory"
-          echo "Project environment: ${{ github.event.inputs.Environment }}"
-          echo "Function Name: ${{ github.event.inputs.Functions }}"
-          gcloud functions deploy ${{ github.event.inputs.Functions }} --region ${{ github.event.inputs.Region }} --project ${{ github.event.inputs.Project }}  --memory ${{ github.event.inputs.Memory }}MB"
 
       - name: functions env update
-        uses: actions-hub/gcloud@master
+        #uses: actions-hub/gcloud@master
         if: ${{ github.event.inputs.Parameter == 'Environment_variables' }}
         run: |
           echo "Updating functions Environment Variables"
