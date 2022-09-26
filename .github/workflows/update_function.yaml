@@ -73,6 +73,11 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        
+      - name: functions source
+        run: |
+          rm ${{ github.event.inputs.Code }}/temp/*.zip
+          zip -r ${{ github.event.inputs.Code }}/temp/"${{ github.event.inputs.Functions }}.zip" ${{ github.event.inputs.Code }}
 
       - name: functions code update
         #uses: actions-hub/gcloud@master
@@ -85,10 +90,11 @@ jobs:
       - name: functions memory update
         uses: actions-hub/gcloud@master
         with:
-          args: functions deploy ${{ github.event.inputs.Functions }} --region ${{ github.event.inputs.Region }} --memory "${{ github.event.inputs.Memory }}MB"
+          args: functions deploy ${{ github.event.inputs.Functions }} --region=${{ github.event.inputs.Region }} --memory="${{ github.event.inputs.Memory }}MB"
         env:
           PROJECT_ID: ${{ github.event.inputs.Project }}
           APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          GOOGLE_FUNCTION_SOURCE: ${{ github.event.inputs.Code }}/temp/"${{ github.event.inputs.Functions }}.zip"
         if: ${{ github.event.inputs.Parameter == 'Memory' }}
 
       - name: functions env update
