@@ -32,8 +32,8 @@ on:
         type: choice
         description: "Function Name"
         options:
-          - Test_function
-          - demo_function
+          - test-function
+          - demo-function
       Parameter:
         required: true
         type: choice
@@ -47,8 +47,8 @@ on:
         type: choice
         description: "Functions code"
         options:
-          - functions_code/test_functions
-          - functions_code/demo_functions
+          - functions_code/test-functions
+          - functions_code/demo-functions
       Memory:
         required: true
         type: choice
@@ -71,7 +71,7 @@ env:
 jobs:
   terraform:
     name: "Cloud Functions Update"
-    runs-on: ubuntu-latest
+    runs-on: actions-hub/gcloud@master
 
     steps:
       - name: checkout
@@ -90,7 +90,7 @@ jobs:
           echo "Updating functions Memory"
           echo "Project environment: ${{ github.event.inputs.Environment }}"
           echo "Function Name: ${{ github.event.inputs.Functions }}"
-          echo "gcloud functions deploy ${{ github.event.inputs.Functions }} --region ${{ github.event.inputs.Region }} --project ${{ github.event.inputs.Project }}  --memory ${{ github.event.inputs.Memory }}"
+          gcloud functions deploy ${{ github.event.inputs.Functions }} --region ${{ github.event.inputs.Region }} --project ${{ github.event.inputs.Project }}  --memory ${{ github.event.inputs.Memory }}MB"
 
       - name: functions env update
         if: ${{ github.event.inputs.Parameter == 'Environment_variables' }}
