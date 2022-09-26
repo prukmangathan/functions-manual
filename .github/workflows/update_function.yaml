@@ -65,10 +65,6 @@ on:
           - functions_code/test_functions/env
           - functions_code/demo_functions/env
 
-env:
-  PROJECT_ID: ${{ github.event.inputs.Project }}
-  GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-
 jobs:
   terraform:
     name: "Cloud Functions Update"
@@ -89,7 +85,10 @@ jobs:
       - name: functions memory update
         uses: actions-hub/gcloud@master
         with:
-          args: functions deploy ${{ github.event.inputs.Functions }} --region ${{ github.event.inputs.Region }} --project ${{ github.event.inputs.Project }}  --memory "${{ github.event.inputs.Memory }}MB"
+          args: functions deploy ${{ github.event.inputs.Functions }} --region ${{ github.event.inputs.Region }} --memory "${{ github.event.inputs.Memory }}MB"
+        env:
+          PROJECT_ID: ${{ github.event.inputs.Project }}
+          APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         if: ${{ github.event.inputs.Parameter == 'Memory' }}
 
       - name: functions env update
