@@ -32,8 +32,8 @@ on:
         type: choice
         description: "Function Name"
         options:
-          - test-function
-          - demo-function
+          - test-functions
+          - demo-functions
       Parameter:
         required: true
         type: choice
