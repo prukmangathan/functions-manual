@@ -60,7 +60,7 @@ on:
       Environment_variables:
         required: true
         type: choice
-        description: "Functions Memory"
+        description: "Functions Environmental Variables"
         options:
           - functions_code/test_functions/env
           - functions_code/demo_functions/env
@@ -71,20 +71,22 @@ env:
 jobs:
   terraform:
     name: "Cloud Functions Update"
-    runs-on: actions-hub/gcloud@master
+    runs-on: ubuntu-latest
 
     steps:
       - name: checkout
         uses: actions/checkout@v2
 
       - name: functions code update
+        uses: actions-hub/gcloud@master
         if: ${{ github.event.inputs.Parameter == 'Code' }}
         run: |
-          echo "Updating functions code"
+          echo "Updating functions Code"
           echo "Project environment: ${{ github.event.inputs.Environment }}"
           echo "Function Name: ${{ github.event.inputs.Functions }}"
 
       - name: functions memory update
+        uses: actions-hub/gcloud@master
         if: ${{ github.event.inputs.Parameter == 'Memory' }}
         run: |
           echo "Updating functions Memory"
@@ -93,6 +95,7 @@ jobs:
           gcloud functions deploy ${{ github.event.inputs.Functions }} --region ${{ github.event.inputs.Region }} --project ${{ github.event.inputs.Project }}  --memory ${{ github.event.inputs.Memory }}MB"
 
       - name: functions env update
+        uses: actions-hub/gcloud@master
         if: ${{ github.event.inputs.Parameter == 'Environment_variables' }}
         run: |
           echo "Updating functions Environment Variables"
