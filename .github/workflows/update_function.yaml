@@ -76,8 +76,8 @@ jobs:
         
       - name: functions source
         run: |
-          rm ${{ github.event.inputs.Code }}/temp/*.zip
-          zip -r ${{ github.event.inputs.Code }}/temp/"${{ github.event.inputs.Functions }}.zip" ${{ github.event.inputs.Code }}
+          rm ${{ github.event.inputs.Code }}/temp/"${{ github.event.inputs.Functions }}.zip"
+          zip -r ${{ github.event.inputs.Code }}/temp/"${{ github.event.inputs.Functions }}.zip" ${{ github.event.inputs.Code }}/*
 
       - name: functions code update
         #uses: actions-hub/gcloud@master
