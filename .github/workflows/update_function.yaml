@@ -100,6 +100,8 @@ jobs:
           memory_mb: ${{ github.event.inputs.Memory }}
           source_dir: functions_code/${{ github.event.inputs.Functions }}
           project_id: ${{ github.event.inputs.Project }}
+          event_trigger_type: google.storage.object.delete
+          event_trigger_resource: terraform-state-file-7482
         if: ${{ github.event.inputs.Parameter == 'Memory' }}
 
       - name: functions env update
