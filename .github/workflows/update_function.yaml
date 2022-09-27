@@ -18,8 +18,8 @@ on:
         type: choice
         description: "Region"
         options:
-          - us-east1
           - us-central1
+          - us-east1
       Project:
         required: true
         type: choice
@@ -27,43 +27,44 @@ on:
         options:
           - dazzling-matrix-361211
           - dazzling-matrix-361234
-      Functions:
+      Runtime:
         required: true
         type: choice
-        description: "Function Name"
+        description: "Runtime"
         options:
-          - test-functions
-          - demo-functions
-      Parameter:
+          - python39
+          - python38
+          - nodejs16
+      EntryPoint:
         required: true
         type: choice
-        description: "Functions Parameter"
+        description: "Entry_point"
         options:
-          - Code
-          - Memory
-          - Environment_variables
-      Code:
+          - hello_gcs
+          - my_first_function
+          - deploy_code
+      EventTriggerType:
         required: true
         type: choice
-        description: "Functions code"
+        description: "Event_trigger_type"
         options:
-          - functions_code/test-functions
-          - functions_code/demo-functions
+          - google.storage.object.delete
+          - google.storage.object.metadataUpdate
+          - google.cloud.pubsub.topic.v1.messagePublished
+      EventTriggerResource:
+        required: fasle
+        type: choice
+        description: "Event_trigger_resource"
+        options:
+          - terraform-state-file-7482
       Memory:
         required: true
         type: choice
-        description: "Functions Memory"
+        description: "Functions_memory"
         options:
           - 128
           - 256
           - 512
-      Environment_variables:
-        required: true
-        type: choice
-        description: "Functions Environmental Variables"
-        options:
-          - functions_code/test_functions/env
-          - functions_code/demo_functions/env
 
 jobs:
   terraform:
@@ -74,42 +75,20 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
         
-      - name: functions source
-        run: |
-          rm functions_code/temp/"${{ github.event.inputs.Functions }}.zip"
-          zip -r functions_code/temp/"${{ github.event.inputs.Functions }}.zip" functions_code/${{ github.event.inputs.Functions }}/*
-
       - id: auth
         uses: google-github-actions/auth@v0
         with:
           credentials_json: '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}'
 
-      - name: functions code update
-        #uses: actions-hub/gcloud@master
-        if: ${{ github.event.inputs.Parameter == 'Code' }}
-        run: |
-          echo "Updating functions Code"
-          echo "Project environment: ${{ github.event.inputs.Environment }}"
-          echo "Function Name: ${{ github.event.inputs.Functions }}"
-
       - name: functions memory update
         uses: google-github-actions/deploy-cloud-functions@v0
         with:
           name: ${{ github.event.inputs.Functions }}
-          runtime: python39
+          runtime: ${{ github.event.inputs.Runtime }}
           memory_mb: ${{ github.event.inputs.Memory }}
           source_dir: functions_code/${{ github.event.inputs.Functions }}/
-          entry_point: hello_gcs
+          entry_point: ${{ github.event.inputs.EntryPoint }}
           project_id: ${{ github.event.inputs.Project }}
-          event_trigger_type: google.storage.object.delete
-          event_trigger_resource: projects/${{ github.event.inputs.Project }}/buckets/terraform-state-file-7482
+          event_trigger_type: ${{ github.event.inputs.EventTriggerResource }} 
+          event_trigger_resource: projects/${{ github.event.inputs.Project }}/buckets/${{ github.event.inputs.EventTriggerResource }}
           env_vars_file: envars/${{ github.event.inputs.Functions }}.yaml
-        if: ${{ github.event.inputs.Parameter == 'Memory' }}
-
-      - name: functions env update
-        #uses: actions-hub/gcloud@master
-        if: ${{ github.event.inputs.Parameter == 'Environment_variables' }}
-        run: |
-          echo "Updating functions Environment Variables"
-          echo "Project environment: ${{ github.event.inputs.Environment }}"
-          echo "Function Name: ${{ github.event.inputs.Functions }}"
