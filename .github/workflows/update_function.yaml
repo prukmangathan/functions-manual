@@ -59,7 +59,7 @@ on:
           - google.storage.object.metadataUpdate
           - google.cloud.pubsub.topic.v1.messagePublished
       EventTriggerResource:
-        required: fasle
+        required: true
         type: choice
         description: "Event_trigger_resource"
         options:
