@@ -79,6 +79,11 @@ jobs:
           rm functions_code/temp/"${{ github.event.inputs.Functions }}.zip"
           zip -r functions_code/temp/"${{ github.event.inputs.Functions }}.zip" functions_code/${{ github.event.inputs.Functions }}/*
 
+      - id: auth
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}'
+
       - name: functions code update
         #uses: actions-hub/gcloud@master
         if: ${{ github.event.inputs.Parameter == 'Code' }}
@@ -95,8 +100,6 @@ jobs:
           memory_mb: ${{ github.event.inputs.Memory }}
           source_dir: functions_code/${{ github.event.inputs.Functions }}
           project_id: ${{ github.event.inputs.Project }}
-        env:
-          APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         if: ${{ github.event.inputs.Parameter == 'Memory' }}
 
       - name: functions env update
