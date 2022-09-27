@@ -94,8 +94,8 @@ jobs:
           runtime: python39
           memory_mb: ${{ github.event.inputs.Memory }}
           source_dir: functions_code/${{ github.event.inputs.Functions }}
+          project_id: ${{ github.event.inputs.Project }}
         env:
-          PROJECT_ID: ${{ github.event.inputs.Project }}
           APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         if: ${{ github.event.inputs.Parameter == 'Memory' }}
 
