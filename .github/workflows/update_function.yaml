@@ -1,4 +1,4 @@
-name: "Sample Options"
+name: "Cloud Functions Create/Update"
 
 on:
   workflow_dispatch:
