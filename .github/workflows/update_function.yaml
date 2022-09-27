@@ -88,13 +88,15 @@ jobs:
           echo "Function Name: ${{ github.event.inputs.Functions }}"
 
       - name: functions memory update
-        uses: actions-hub/gcloud@master
+        uses: google-github-actions/deploy-cloud-functions@v0
         with:
-          args: functions deploy ${{ github.event.inputs.Functions }} --region=${{ github.event.inputs.Region }} --memory="${{ github.event.inputs.Memory }}MB"
+          name: ${{ github.event.inputs.Functions }}
+          runtime: python39
+          memory_mb: ${{ github.event.inputs.Memory }}
+          source_dir: functions_code/${{ github.event.inputs.Functions }}
         env:
           PROJECT_ID: ${{ github.event.inputs.Project }}
           APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-          GOOGLE_FUNCTION_SOURCE: functions_code/${{ github.event.inputs.Functions }}
         if: ${{ github.event.inputs.Parameter == 'Memory' }}
 
       - name: functions env update
