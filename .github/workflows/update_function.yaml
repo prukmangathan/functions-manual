@@ -57,7 +57,7 @@ on:
         options:
           - google.storage.object.delete
           - google.storage.object.metadataUpdate
-          - google.cloud.pubsub.topic.v1.messagePublished
+          - providers/cloud.pubsub/eventTypes/topic.publish
       EventTriggerResource:
         required: true
         type: choice
