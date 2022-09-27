@@ -27,6 +27,13 @@ on:
         options:
           - dazzling-matrix-361211
           - dazzling-matrix-361234
+      Functions:
+        required: true
+        type: choice
+        description: "Function_name"
+        options:
+          - demo-functions
+          - test-functions
       Runtime:
         required: true
         type: choice
@@ -34,6 +41,7 @@ on:
         options:
           - python39
           - python38
+          - python37
           - nodejs16
       EntryPoint:
         required: true
@@ -41,8 +49,7 @@ on:
         description: "Entry_point"
         options:
           - hello_gcs
-          - my_first_function
-          - deploy_code
+          - hello_pubsub
       EventTriggerType:
         required: true
         type: choice
@@ -56,7 +63,8 @@ on:
         type: choice
         description: "Event_trigger_resource"
         options:
-          - terraform-state-file-7482
+          - buckets/terraform-state-file-7482
+          - topics/cloud_functions_topic
       Memory:
         required: true
         type: choice
@@ -84,11 +92,12 @@ jobs:
         uses: google-github-actions/deploy-cloud-functions@v0
         with:
           name: ${{ github.event.inputs.Functions }}
+          region: ${{ github.event.inputs.Region }}
           runtime: ${{ github.event.inputs.Runtime }}
           memory_mb: ${{ github.event.inputs.Memory }}
           source_dir: functions_code/${{ github.event.inputs.Functions }}/
           entry_point: ${{ github.event.inputs.EntryPoint }}
           project_id: ${{ github.event.inputs.Project }}
           event_trigger_type: ${{ github.event.inputs.EventTriggerResource }} 
-          event_trigger_resource: projects/${{ github.event.inputs.Project }}/buckets/${{ github.event.inputs.EventTriggerResource }}
+          event_trigger_resource: projects/${{ github.event.inputs.Project }}/${{ github.event.inputs.EventTriggerResource }}
           env_vars_file: envars/${{ github.event.inputs.Functions }}.yaml
