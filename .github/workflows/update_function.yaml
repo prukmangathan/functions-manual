@@ -98,6 +98,6 @@ jobs:
           source_dir: functions_code/${{ github.event.inputs.Functions }}/
           entry_point: ${{ github.event.inputs.EntryPoint }}
           project_id: ${{ github.event.inputs.Project }}
-          event_trigger_type: ${{ github.event.inputs.EventTriggerResource }} 
+          event_trigger_type: ${{ github.event.inputs.EventTriggerType }} 
           event_trigger_resource: projects/${{ github.event.inputs.Project }}/${{ github.event.inputs.EventTriggerResource }}
           env_vars_file: envars/${{ github.event.inputs.Functions }}.yaml
