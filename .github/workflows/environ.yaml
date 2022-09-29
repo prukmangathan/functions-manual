@@ -39,6 +39,6 @@ jobs:
       - name: Terraform Apply
         id: apply
         if: ( github.base_ref == 'qa' && github.event_name == 'pull_request' ) || ( github.base_ref == 'prod' && github.event_name == 'pull_request' )
-        run: terraform apply -var-file=tfvars/"${{ github.base_ref }}.auto.tfvars" --auto-approve
+        run: terraform apply -var="name=github-actions" -var="environment=${{ github.base_ref }}" --auto-approve
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
