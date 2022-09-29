@@ -1,0 +1,36 @@
+name: "Env_PR"
+
+on:
+  push:
+    branches:
+      - prod
+  pull_request:
+    branches:
+      - dev
+      - qa
+      - prod
+env:
+  GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+
+defaults:
+  run:
+    working-directory: tf
+
+jobs:
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: Terraform Init
+        id: init
+        run: terraform init -backend-config=config/${{ github.base_ref }}.conf
+
+      - name: Terraform Plan
+        id: plan
+        if: ( github.base_ref == 'dev' && github.event_name == 'pull_request' ) || ( github.base_ref == 'qa' && github.event_name == 'pull_request' ) || ( github.base_ref == 'prod' && github.event_name == 'pull_request' )
+        run: terraform plan -no-color -var="name=github-actions" -var="environment=${{ github.base_ref }}"
+
