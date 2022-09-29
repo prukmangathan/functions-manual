@@ -9,8 +9,6 @@ on:
       - dev
       - qa
       - prod
-env:
-  GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
 defaults:
   run:
@@ -28,13 +26,19 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init -backend-config=config/${{ github.base_ref }}.conf
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Terraform Plan
         id: plan
         if: ( github.base_ref == 'dev' && github.event_name == 'pull_request' ) || ( github.base_ref == 'qa' && github.event_name == 'pull_request' ) || ( github.base_ref == 'prod' && github.event_name == 'pull_request' )
         run: terraform plan -no-color -var="name=github-actions" -var="environment=${{ github.base_ref }}"
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Terraform Apply
         id: apply
         if: ( github.base_ref == 'qa' && github.event_name == 'pull_request' ) || ( github.base_ref == 'prod' && github.event_name == 'pull_request' )
         run: terraform apply -var-file=tfvars/"${{ github.base_ref }}.auto.tfvars" --auto-approve
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
