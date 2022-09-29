@@ -1,1 +1,3 @@
-# functions-manual
+# Deploy/Update Google Cloud Functions
+
+
